@@ -48,14 +48,7 @@ public class MouseOperations
     public static void MouseEvent(MouseEventFlags value)
     {
         MousePoint position = GetCursorPosition();
-
-        mouse_event
-            ((int)value,
-             position.X,
-             position.Y,
-             0,
-             0)
-            ;
+        mouse_event((int)value, position.X, position.Y, 0, 0);
     }
 
     [StructLayout(LayoutKind.Sequential)]

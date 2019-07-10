@@ -6,50 +6,10 @@ using System.Windows.Interop;
 namespace Clicker
 {
     /// <summary>
-    /// Struct representing a point.
-    /// </summary>
-    [StructLayout(LayoutKind.Sequential)]
-    public struct POINT
-    {
-        public int X;
-        public int Y;
-
-        public static implicit operator Point(POINT point)
-        {
-            return new Point(point.X, point.Y);
-        }
-    }
-
-    /// <summary>
     /// Interaction logic for MainWindow.xaml
     /// </summary>
     public partial class MainWindow : Window
     {
-        [DllImport("user32.dll", CharSet = CharSet.Auto, CallingConvention = CallingConvention.StdCall)]
-        public static extern void mouse_event(uint dwFlags, uint dx, uint dy, uint cButtons, uint dwExtraInfo);
-        //Mouse actions
-        private const int MOUSEEVENTF_LEFTDOWN = 0x02;
-        private const int MOUSEEVENTF_LEFTUP = 0x04;
-        private const int MOUSEEVENTF_RIGHTDOWN = 0x08;
-        private const int MOUSEEVENTF_RIGHTUP = 0x10;
-
-        /// <summary>
-        /// Retrieves the cursor's position, in screen coordinates.
-        /// </summary>
-        /// <see>See MSDN documentation for further information.</see>
-        [DllImport("user32.dll")]
-        public static extern bool GetCursorPos(out POINT lpPoint);
-
-        public static Point GetCursorPosition()
-        {
-            POINT lpPoint;
-            GetCursorPos(out lpPoint);
-            //bool success = User32.GetCursorPos(out lpPoint);
-            // if (!success)
-
-            return lpPoint;
-        }
-
         [DllImport("user32.dll")]
         private static extern bool RegisterHotKey(IntPtr hWnd, int id, uint fsModifiers, uint vk);
 
@@ -97,9 +57,7 @@ namespace Clicker
                             int vkey = (((int)lParam >> 16) & 0xFFFF);
                             if (vkey == VK_CAPITAL)
                             {
-                                Point p = GetCursorPosition();
-                                mouse_event(MOUSEEVENTF_RIGHTDOWN, (uint)p.X, (uint)p.Y, 0, 0);
-                                tblock.Text = "Clicked";
+                                MouseOperations.MouseEvent(MouseOperations.MouseEventFlags.RightDown);
                             }
                             handled = true;
                             break;
