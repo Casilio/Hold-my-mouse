@@ -7,6 +7,17 @@
         mc:Ignorable="d"
         WindowStartupLocation="CenterScreen"
         Closing="Window_Closing"
-        Title="Hold my mouse" Height="200" Width="300">
-    <Grid/>
+        Title="Hold my mouse" Height="118.518" Width="300">
+    <Grid VerticalAlignment="Center" Focusable="True" Name="grid">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="*" />
+            <RowDefinition Height="*" />
+        </Grid.RowDefinitions>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="78"></ColumnDefinition>
+            <ColumnDefinition Width="*"></ColumnDefinition>
+        </Grid.ColumnDefinitions>
+        <Label Grid.Column="0" Grid.Row="0">RMB Down:</Label>
+        <TextBox Grid.Column="1" Grid.Row="0" VerticalAlignment="Center" KeyUp="TextBox_KeyUp" KeyDown="TextBox_KeyDown" IsReadOnly="true" Name="shorcut" GotFocus="Shorcut_GotFocus" LostFocus="Shorcut_LostFocus"/>
+    </Grid>
 </Window>
