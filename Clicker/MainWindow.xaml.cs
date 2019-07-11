@@ -131,5 +131,12 @@ namespace Clicker
         {
             shorcut.Background = Brushes.White;
         }
+
+        private void MenuItem_Click(object sender, RoutedEventArgs e)
+        {
+            About about = new About();
+            about.Owner = this;
+            about.ShowDialog();
+        }
     }
 }
