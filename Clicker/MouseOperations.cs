@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Runtime.InteropServices;
+using System.Windows.Input;
 
 public class MouseOperations
 {
@@ -16,6 +17,13 @@ public class MouseOperations
         RightUp = 0x00000010
     }
 
+    [Flags]
+    public enum MouseButtons
+    {
+        VK_LBUTTON = 0x01,
+        VK_RBUTTON = 0x02
+    }
+
     [DllImport("user32.dll", EntryPoint = "SetCursorPos")]
     [return: MarshalAs(UnmanagedType.Bool)]
     private static extern bool SetCursorPos(int x, int y);
@@ -27,17 +35,23 @@ public class MouseOperations
     [DllImport("user32.dll")]
     private static extern void mouse_event(int dwFlags, int dx, int dy, int dwData, int dwExtraInfo);
 
-    public static void SetCursorPosition(int x, int y)
+    [DllImport("user32.dll")]
+    private static extern short GetAsyncKeyState(int vKey);
+
+    public static void ToggleButton()
     {
-        SetCursorPos(x, y);
+        var currentState = GetAsyncKeyState((int)MouseButtons.VK_LBUTTON);
+        if (currentState != 0)
+        {
+            MouseEvent(MouseEventFlags.LeftUp);
+        }
+        else
+        {
+            MouseEvent(MouseEventFlags.LeftDown);
+        }
     }
 
-    public static void SetCursorPosition(MousePoint point)
-    {
-        SetCursorPos(point.X, point.Y);
-    }
-
-    public static MousePoint GetCursorPosition()
+    private static MousePoint GetCursorPosition()
     {
         MousePoint currentMousePoint;
         var gotPoint = GetCursorPos(out currentMousePoint);
@@ -45,7 +59,7 @@ public class MouseOperations
         return currentMousePoint;
     }
 
-    public static void MouseEvent(MouseEventFlags value)
+    private static void MouseEvent(MouseEventFlags value)
     {
         MousePoint position = GetCursorPosition();
         mouse_event((int)value, position.X, position.Y, 0, 0);

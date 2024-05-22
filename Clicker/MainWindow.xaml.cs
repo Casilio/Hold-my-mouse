@@ -36,6 +36,7 @@ namespace Clicker
 
         private IntPtr _windowHandle;
         private HwndSource _source;
+
         protected override void OnSourceInitialized(EventArgs e)
         {
             base.OnSourceInitialized(e);
@@ -44,9 +45,9 @@ namespace Clicker
             _source = HwndSource.FromHwnd(_windowHandle);
             _source.AddHook(HwndHook);
 
-            shorcut.Text = Properties.Settings.Default["Text"].ToString();
+            shortcut.Text = Properties.Settings.Default["Text"].ToString();
 
-            map_buttons();
+            registerShortcut();
         }
 
         private IntPtr HwndHook(IntPtr hwnd, int msg, IntPtr wParam, IntPtr lParam, ref bool handled)
@@ -61,7 +62,7 @@ namespace Clicker
                             int vkey = (((int)lParam >> 16) & 0xFFFF);
                             if (vkey == KeyInterop.VirtualKeyFromKey((Key)Properties.Settings.Default.Key))
                             {
-                                MouseOperations.MouseEvent(MouseOperations.MouseEventFlags.RightDown);
+                                MouseOperations.ToggleButton();
                             }
                             handled = true;
                             break;
@@ -83,14 +84,14 @@ namespace Clicker
             if (!this.modifiers.Contains(e.Key)) {
                 Properties.Settings.Default["Modifiers"] = e.KeyboardDevice.Modifiers.GetHashCode();
                 Properties.Settings.Default["Key"] = e.Key.GetHashCode();
-                Properties.Settings.Default["Text"] = build_text(e);
+                Properties.Settings.Default["Text"] = keysToText(e);
                 Properties.Settings.Default.Save();
 
-                shorcut.Text = build_text(e);
+                shortcut.Text = keysToText(e);
 
-                grid.Focus();
+                registerShortcut();
 
-                map_buttons();
+                shortcut.Background = Brushes.White;
             }
             
         }
@@ -99,11 +100,11 @@ namespace Clicker
         {
             if (!this.modifiers.Contains(e.Key))
             {
-                shorcut.Text = build_text(e);
+                shortcut.Text = keysToText(e);
             }
         }
 
-        private String build_text(KeyEventArgs e)
+        private String keysToText(KeyEventArgs e)
         {
             StringBuilder builder = new StringBuilder();
 
@@ -114,7 +115,7 @@ namespace Clicker
             return builder.ToString();
         }
 
-        private void map_buttons()
+        private void registerShortcut()
         {
             uint modifiers = (uint)Properties.Settings.Default.Modifiers;
             uint key = (uint)KeyInterop.VirtualKeyFromKey((Key)Properties.Settings.Default.Key);
@@ -124,12 +125,12 @@ namespace Clicker
 
         private void Shorcut_GotFocus(object sender, RoutedEventArgs e)
         {
-            shorcut.Background = Brushes.LightYellow;
+            shortcut.Background = Brushes.LightYellow;
         }
 
         private void Shorcut_LostFocus(object sender, RoutedEventArgs e)
         {
-            shorcut.Background = Brushes.White;
+            shortcut.Background = Brushes.White;
         }
 
         private void MenuItem_Click(object sender, RoutedEventArgs e)

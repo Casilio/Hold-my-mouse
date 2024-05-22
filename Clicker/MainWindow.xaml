@@ -7,13 +7,15 @@
         mc:Ignorable="d"
         WindowStartupLocation="CenterScreen"
         Closing="Window_Closing"
-        Title="Hold my mouse" Height="177.037" Width="476.908">
+        Title="Hold my mouse" Height="161" Width="520">
     <DockPanel>
         <Menu DockPanel.Dock="Top">
             <MenuItem Header="About" Click="MenuItem_Click"></MenuItem>
         </Menu>
-        <Grid VerticalAlignment="Center" Focusable="True" Name="grid">
+        <Grid VerticalAlignment="Bottom" Focusable="false" Name="grid">
             <Grid.RowDefinitions>
+                <RowDefinition Height="*" />
+                <RowDefinition Height="*" />
                 <RowDefinition Height="*" />
                 <RowDefinition Height="*" />
             </Grid.RowDefinitions>
@@ -21,8 +23,11 @@
                 <ColumnDefinition Width="78"></ColumnDefinition>
                 <ColumnDefinition Width="*"></ColumnDefinition>
             </Grid.ColumnDefinitions>
-            <Label Grid.Column="0" Grid.Row="0">RMB Down:</Label>
-            <TextBox Grid.Column="1" Grid.Row="0" VerticalAlignment="Center" KeyUp="TextBox_KeyUp" KeyDown="TextBox_KeyDown" IsReadOnly="true" Name="shorcut" GotFocus="Shorcut_GotFocus" LostFocus="Shorcut_LostFocus"/>
+            <Label Grid.Column="0" Grid.Row="0" Grid.ColumnSpan="2" Content="Register a shortcut below." HorizontalContentAlignment="Center" FontSize="12"/>
+            <Label Grid.Column="0" Grid.Row="1" Grid.ColumnSpan="2" Content="Press choosen shortcut to emulate 'mouse button down' event" HorizontalContentAlignment="Center" FontSize="12"/>
+            <Label Grid.Column="0" Grid.Row="2" Grid.ColumnSpan="2" Content="Press it again to emulate 'mouse button up' event (or just click your physical mouse button)" HorizontalContentAlignment="Center" FontSize="12"/>
+            <Label Grid.Column="0" Grid.Row="3">LMB Down:</Label>
+            <TextBox Grid.Column="1" Grid.Row="3" VerticalAlignment="Center" KeyUp="TextBox_KeyUp" KeyDown="TextBox_KeyDown" IsReadOnly="true" Name="shortcut" GotFocus="Shorcut_GotFocus" LostFocus="Shorcut_LostFocus"/>
         </Grid>
     </DockPanel>
 </Window>
